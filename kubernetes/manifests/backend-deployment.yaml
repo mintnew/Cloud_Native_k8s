@@ -13,17 +13,35 @@ spec:
       labels:
         app: backend
     spec:
+      serviceAccountName: external-secrets-sa   # 👈 IRSA enabled SA
       containers:
         - name: backend
           image: 317105901372.dkr.ecr.us-east-1.amazonaws.com/ecommerce-backend:latest
           ports:
             - containerPort: 3000
+
           env:
-            - name: DB_HOST
-              value: "ecommerce-db.c492m8s2auhj.us-east-1.rds.amazonaws.com"
-            - name: DB_USER
-              value: "postgres"
-            - name: DB_PASSWORD
-              value: "mypassword101"
-            - name: DB_NAME
-              value: "ecommerce"
+           - name: DB_HOST
+             valueFrom:
+               secretKeyRef:
+                 name: db-secret
+                 key: DB_HOST
+
+           - name: DB_USER
+             valueFrom:
+               secretKeyRef:
+                 name: db-secret
+                 key: DB_USER
+
+           - name: DB_PASSWORD
+             valueFrom:
+               secretKeyRef:
+                 name: db-secret
+                 key: DB_PASSWORD
+
+           - name: DB_NAME
+             valueFrom:
+               secretKeyRef:
+                 name: db-secret
+                 key: DB_NAME
+   
