@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: ecommerce
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: 317105901372.dkr.ecr.us-east-1.amazonaws.com/ecommerce-backend:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: DB_HOST
+              value: "ecommerce-db.c492m8s2auhj.us-east-1.rds.amazonaws.com"
+            - name: DB_USER
+              value: "postgres"
+            - name: DB_PASSWORD
+              value: "mypassword101"
+            - name: DB_NAME
+              value: "ecommerce"

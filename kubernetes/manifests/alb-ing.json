@@ -1,0 +1,25 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "acm:DescribeCertificate",
+                "acm:ListCertificates",
+                "elasticloadbalancing:*",
+                "ec2:Describe*",
+                "iam:ListServerCertificates",
+                "cognito-idp:ListUserPools",
+                "waf-regional:GetWebACLForResource",
+                "waf-regional:GetWebACL",
+                "waf-regional:ListWebACLs",
+                "tag:GetResources",
+                "tag:TagResources",
+                "wafv2:GetWebACL",
+                "wafv2:GetWebACLForResource",
+                "wafv2:ListWebACLs"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
