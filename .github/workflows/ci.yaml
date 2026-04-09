@@ -1,7 +1,8 @@
 name: cloudnative-platform-image-build
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [ docker_iac ]
 
 permissions:
   id-token: write
@@ -31,7 +32,7 @@ jobs:
           ECR_REPOSITORY: ${{ secrets.AWS_ECR_REPO }}
           IMAGE_TAG: latest
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG docker/frontend/.
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
       - name: Checkout Terraform branch
