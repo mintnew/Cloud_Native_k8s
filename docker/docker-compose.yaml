@@ -1,0 +1,64 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: ecommerce-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD}   # use env file or secrets
+      POSTGRES_DB: ecommerce
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - ecommerce-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
+      interval: 10s
+      retries: 5
+
+  backend:
+    build: backend/
+    container_name: ecommerce-backend
+    restart: always
+    environment:
+      DB_HOST: db
+      DB_USER: postgres
+      DB_PASSWORD: ${DB_PASSWORD}   # secure env var
+      DB_NAME: ecommerce
+      DB_PORT: 5432
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - ecommerce-net
+    read_only: true            # container root is read-only
+    tmpfs: /tmp                # writable tmpfs for temp files
+
+  frontend:
+    build: frontend/
+    container_name: ecommerce-frontend
+    restart: always
+    ports:
+    - "80:80"
+    depends_on:
+    - backend
+    networks:
+    - ecommerce-net
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /run
+      - /var/cache/nginx  # <- add this line for Nginx temp files
+
+volumes:
+  db-data:
+
+networks:
+  ecommerce-net:
+    driver: bridge
