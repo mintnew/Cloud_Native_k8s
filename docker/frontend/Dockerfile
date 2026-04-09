@@ -1,5 +1,5 @@
 # Stage 1: Build React app
-FROM node:24-alpine AS build
+FROM node:24 AS build
 
 # Create non-root user
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
