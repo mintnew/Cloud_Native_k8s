@@ -1,33 +1,26 @@
 # Stage 1: Build React app
-FROM node:24 AS build
+FROM node:24-bullseye-slim AS build
 
 WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json
+# Copy package files
 COPY package*.json ./
 
-# Install dependencies as root, fix execute permission for CLI scripts
-RUN npm ci \
-    && chmod -R +x node_modules/.bin
+# Install dependencies
+RUN npm ci
 
-# Copy all source code
+# Copy source
 COPY . .
 
-# Build the React app
-RUN npm run build
-
-# After build
-RUN groupadd appgroup && useradd -m -g appgroup appuser && chown -R appuser:appgroup /usr/src/app
-
-USER appuser
+# Build React app via npx
+RUN npx react-scripts build
 
 # Stage 2: Serve with Nginx
 FROM nginx:alpine
 
-# Copy built files
 COPY --from=build /usr/src/app/build /usr/share/nginx/html
 
-# Optional: read-only
+# Make files read-only
 RUN chmod -R 555 /usr/share/nginx/html
 
 EXPOSE 80
