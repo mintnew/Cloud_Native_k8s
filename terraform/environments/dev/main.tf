@@ -27,3 +27,10 @@ module "rds" {
   private_subnet_ids = module.vpc.private_subnets
   db_password        = var.db_password
 }
+
+module "github_oidc" {
+  source = "../../modules/iam"
+
+  github_repo   = "mintnew/Cloud_Native_k8s"
+  github_branch = "main"
+}
