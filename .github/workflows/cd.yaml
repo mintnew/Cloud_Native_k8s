@@ -26,7 +26,7 @@ jobs:
       # 3. Update Image in frontend deployment
       - name: Update Image in YAML
         run: |
-          sed -i "s|image: .*|image: <ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/${{ secrets.AWS_ECR_REPO }}:$IMAGE_TAG|g" kubernetes/manifests/frontend-deployment.yaml
+          sed -i "s|image: .*|image: 317105901372.dkr.ecr.us-east-1.amazonaws.com/${{ secrets.AWS_ECR_REPO }}:$IMAGE_TAG|g" kubernetes/manifests/frontend-deployment.yaml
 
       # 4. Commit and Push
       - name: Commit and Push Changes
