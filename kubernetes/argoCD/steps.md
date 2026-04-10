@@ -102,7 +102,7 @@ Example:
 ```
 cloud-native-platform/
 ├─ kubernetes/
-│   ├─ base/
+│   ├─ manifests/
 │   │   ├─ secret_store.yaml
 │   │   ├─ external_secret.yaml
 │   │   ├─ backend-deployment.yaml
